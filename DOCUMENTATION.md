@@ -30,7 +30,7 @@ const userId = await this.securityService.createUser();
 // Now that we have the user we attach options to it
 await this.passwordService.attach(userId, {
   username: "USERNAME",
-  password: "PASSWORD,
+  password: "PASSWORD",
 });
 ```
 

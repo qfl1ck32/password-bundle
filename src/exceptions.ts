@@ -16,7 +16,7 @@ export class PasswordResetExpiredException extends Exception {
   }
 }
 
-export class InvalidTokenException extends Exception {
+export class ResetPasswordInvalidTokenException extends Exception {
   getMessage() {
     return "Token is invalid.";
   }

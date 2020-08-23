@@ -57,6 +57,8 @@ export interface IHasherService {
 
 export interface IPasswordAuthenticationStrategyCreationOptions {
   username: string;
+  email?: string;
+  isEmailVerified?: boolean;
   password: string;
 }
 
@@ -66,7 +68,10 @@ export interface IPasswordValidationOptions {
 
 export interface IPasswordAuthenticationStrategy {
   username: string;
-  email: string;
+  email?: string;
+
+  isEmailVerified?: boolean;
+  emailVerificationToken?: string;
 
   // Unique salt per user
   salt: string;

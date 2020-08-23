@@ -23,7 +23,7 @@ import {
 import {
   CooldownException,
   PasswordResetExpiredException,
-  InvalidTokenException,
+  ResetPasswordInvalidTokenException,
 } from "../exceptions";
 
 @Service()
@@ -257,7 +257,7 @@ export class PasswordService implements IPasswordService {
         })
       );
     } else {
-      throw new InvalidTokenException();
+      throw new ResetPasswordInvalidTokenException();
     }
   }
 
