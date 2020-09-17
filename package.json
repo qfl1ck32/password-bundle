@@ -1,7 +1,6 @@
 {
   "name": "@kaviar/password-bundle",
   "version": "1.0.0",
-  "private": true,
   "description": "Authentication strategy using passwords for KaviarJS",
   "main": "dist/index.js",
   "repository": {
