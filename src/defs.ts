@@ -1,4 +1,3 @@
-import { IEmailTemplate } from "@kaviar/email-bundle";
 import {
   IFieldMap,
   FindAuthenticationStrategyResponse,
