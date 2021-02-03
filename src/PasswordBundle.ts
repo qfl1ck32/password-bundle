@@ -16,7 +16,6 @@ export class PasswordBundle extends Bundle<IPasswordBundleConfig> {
   };
 
   async prepare() {
-    //
     this.container.set({
       id: HASHER_SERVICE_TOKEN,
       type: HasherService,
