@@ -72,7 +72,7 @@ export class PasswordService implements IPasswordService {
       salt
     );
 
-    await this.updateData(userId, {
+    const data: any = {
       salt,
       passwordHash,
       username: options.username,
@@ -81,7 +81,13 @@ export class PasswordService implements IPasswordService {
       resetPasswordRequestedAt: null,
       currentFailedLoginAttempts: 0,
       lastFailedLoginAttemptAt: null,
-    });
+    };
+
+    if (options.email) {
+      data.email = options.email;
+    }
+
+    await this.updateData(userId, data);
 
     await this.eventManager.emit(
       new PasswordAuthenticationStrategyAttachedEvent({ userId })
