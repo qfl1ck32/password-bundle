@@ -184,6 +184,11 @@ describe("PasswordService", () => {
     });
 
     expect(await passwordService.isPasswordValid(userId, "123")).toBe(false);
+    expect(await passwordService.isPasswordValid(userId, "123")).toBe(false);
+    expect(await passwordService.isPasswordValid(userId, "123")).toBe(false);
+    await expect(
+      passwordService.isPasswordValid(userId, "123")
+    ).rejects.toBeInstanceOf(Error);
   });
   // it(" ", () => {});
 });

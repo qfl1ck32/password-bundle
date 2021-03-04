@@ -128,7 +128,8 @@ export class PasswordService implements IPasswordService {
     }
 
     if (options.failedAuthenticationAttemptsProcessing) {
-      await this.processFailedAuthentication(isValid, userId, methodData);
+      // non-blocking
+      this.processAuthenticationResult(isValid, userId, methodData);
     }
 
     return isValid;
@@ -137,7 +138,7 @@ export class PasswordService implements IPasswordService {
   /**
    * Authentication failed, so we are processing exactly that
    */
-  protected async processFailedAuthentication(
+  protected async processAuthenticationResult(
     isValid: boolean,
     userId: any,
     methodData: Partial<IPasswordAuthenticationStrategy>
@@ -145,6 +146,7 @@ export class PasswordService implements IPasswordService {
     if (isValid) {
       await this.updateData(userId, {
         currentFailedLoginAttempts: 0,
+        lastFailedLoginAttemptAt: null,
       });
     } else {
       const failedAttempts = methodData.currentFailedLoginAttempts + 1;
@@ -155,7 +157,7 @@ export class PasswordService implements IPasswordService {
       });
 
       if (
-        failedAttempts === this.config.failedAuthenticationAttempts.lockAfter
+        failedAttempts >= this.config.failedAuthenticationAttempts.lockAfter
       ) {
         await this.eventManager.emit(
           new UserLockedAfterFailedAttemptsEvent({
@@ -182,7 +184,7 @@ export class PasswordService implements IPasswordService {
       if (lastFailedLoginAttemptAt) {
         if (lastFailedLoginAttemptAt.getTime() + ms(cooldown) < Date.now()) {
           // it's ok, cooldown passed
-          this.updateData(userId, {
+          await this.updateData(userId, {
             currentFailedLoginAttempts: 0,
           });
         } else {
