@@ -1,5 +1,5 @@
 import { UserLockedAfterFailedAttemptsEvent } from "./../events";
-import { SecurityService, IFieldMap } from "@kaviar/security-bundle";
+import { SecurityService, IFieldMap, UserId } from "@kaviar/security-bundle";
 import {
   IPasswordBundleConfig,
   IPasswordService,
@@ -63,7 +63,7 @@ export class PasswordService implements IPasswordService {
   }
 
   async attach(
-    userId: any,
+    userId: UserId,
     options: IPasswordAuthenticationStrategyCreationOptions
   ): Promise<void> {
     const salt = this.hasherService.generateSalt();
@@ -95,7 +95,7 @@ export class PasswordService implements IPasswordService {
   }
 
   async isPasswordValid(
-    userId: any,
+    userId: UserId,
     password: string,
     options: IPasswordValidationOptions = {
       failedAuthenticationAttemptsProcessing: true,
@@ -140,7 +140,7 @@ export class PasswordService implements IPasswordService {
    */
   protected async processAuthenticationResult(
     isValid: boolean,
-    userId: any,
+    userId: UserId,
     methodData: Partial<IPasswordAuthenticationStrategy>
   ) {
     if (isValid) {
@@ -174,7 +174,7 @@ export class PasswordService implements IPasswordService {
    * Throws an error if not ok, resets currentFailedLoginAttempts
    */
   protected async checkIfInCooldown(
-    userId: any,
+    userId: UserId,
     currentFailedLoginAttempts: number,
     lastFailedLoginAttemptAt: Date
   ): Promise<void> {
@@ -196,7 +196,7 @@ export class PasswordService implements IPasswordService {
     }
   }
 
-  async createTokenForPasswordReset(userId: any): Promise<string> {
+  async createTokenForPasswordReset(userId: UserId): Promise<string> {
     // We need to check if there have been any requests in the past X time
     const isEligible = await this.isEligibleForPasswordResetRequest(userId);
 
@@ -224,7 +224,7 @@ export class PasswordService implements IPasswordService {
   }
 
   async isResetPasswordTokenValid(
-    userId: any,
+    userId: UserId,
     token: string
   ): Promise<boolean> {
     const result = await this.getData(userId, {
@@ -248,7 +248,7 @@ export class PasswordService implements IPasswordService {
   }
 
   async resetPassword(
-    userId: any,
+    userId: UserId,
     token: string,
     newPassword: string
   ): Promise<void> {
@@ -274,7 +274,7 @@ export class PasswordService implements IPasswordService {
    * @param userId
    * @param password
    */
-  async setPassword(userId: any, password: string): Promise<void> {
+  async setPassword(userId: UserId, password: string): Promise<void> {
     const user = await this.getData(userId, {
       salt: 1,
     });
@@ -293,7 +293,7 @@ export class PasswordService implements IPasswordService {
    * @param userId
    * @param username
    */
-  async setUsername(userId: any, username: string): Promise<void> {
+  async setUsername(userId: UserId, username: string): Promise<void> {
     this.updateData(userId, {
       username,
     });
@@ -332,7 +332,7 @@ export class PasswordService implements IPasswordService {
    * @param userId
    */
   protected async isEligibleForPasswordResetRequest(
-    userId: any
+    userId: UserId
   ): Promise<boolean> {
     const methodData = await this.getData(userId, {
       resetPasswordRequestedAt: 1,

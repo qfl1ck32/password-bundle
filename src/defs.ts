@@ -1,6 +1,7 @@
 import {
   IFieldMap,
   FindAuthenticationStrategyResponse,
+  UserId,
 } from "@kaviar/security-bundle";
 
 export interface IPasswordBundleConfig {
@@ -16,20 +17,24 @@ export interface IPasswordBundleConfig {
 
 export interface IPasswordService {
   attach(
-    userId: any,
+    userId: UserId,
     options: IPasswordAuthenticationStrategyCreationOptions
   ): Promise<void>;
   isPasswordValid(
-    userId: any,
+    userId: UserId,
     password: string,
     options?: IPasswordValidationOptions
   ): Promise<boolean>;
   findUserIdByUsername(username: string): Promise<any>;
-  createTokenForPasswordReset(userId: any): Promise<string>;
-  isResetPasswordTokenValid(userId: any, token: string): Promise<boolean>;
-  resetPassword(userId: any, token: string, newPassword: string): Promise<void>;
-  setPassword(userId: any, password: string): Promise<void>;
-  setUsername(userId: any, username: string): Promise<void>;
+  createTokenForPasswordReset(userId: UserId): Promise<string>;
+  isResetPasswordTokenValid(userId: UserId, token: string): Promise<boolean>;
+  resetPassword(
+    userId: UserId,
+    token: string,
+    newPassword: string
+  ): Promise<void>;
+  setPassword(userId: UserId, password: string): Promise<void>;
+  setUsername(userId: UserId, username: string): Promise<void>;
 
   /**
    * Helper method to get data easier
